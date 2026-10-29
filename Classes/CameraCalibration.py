@@ -124,7 +124,7 @@ def calibrate_camera(objpoints, imgpoints):
 
 
 # Calculate the reprojection error of the intrinsic matrix
-  def calculate_reprojection_error(intrinsic_camera_matrix, objpoints, imgpoints):
+def calculate_reprojection_error(intrinsic_camera_matrix, objpoints, imgpoints):
     mtx = intrinsic_camera_matrix['MTX']
     dist = intrinsic_camera_matrix['DIST']
     rvecs = intrinsic_camera_matrix['RVECS']
