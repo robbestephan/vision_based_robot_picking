@@ -136,7 +136,7 @@ def calculate_reprojection_error(intrinsic_camera_matrix, objpoints, imgpoints):
         # Ensure we convert and reshape both to 2D arrays with the same dimensions and type (float32)
         pts1 = np.asarray(imgpoints[i], dtype=np.float32).reshape(-1, 1, 2)
         pts2 = np.asarray(imgpoints2, dtype=np.float32).reshape(-1, 1, 2)
-        error = cv2.norm(pts1, pts2, cv2.NORM_L2)
+        error = cv2.norm(pts1, pts2, cv2.NORM_L2) / len(pts1)
         total_error += error
     return total_error
 
