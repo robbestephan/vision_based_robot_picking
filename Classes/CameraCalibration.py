@@ -124,22 +124,21 @@ def calibrate_camera(objpoints, imgpoints):
 
 
 # Calculate the reprojection error of the intrinsic matrix
-def calculate_reprojection_error(intrinsic_camera_matrix, objpoints, imgpoints):
-    if not intrinsic_camera_matrix:
-        print("No camera matrix found.")
-        exit(0)
-    else:
-        mtx = intrinsic_camera_matrix['MTX']
-        dist = intrinsic_camera_matrix['DIST']
-        rvecs = intrinsic_camera_matrix['RVECS']
-        tvecs = intrinsic_camera_matrix['TVECS']
-
-        tot_error = 0
-        for i in range(len(objpoints)):
-            imgpoints2, _ = cv2.projectPoints(objpoints[i], rvecs[i], tvecs[i], mtx, dist)
-            error = cv2.norm(imgpoints[i], imgpoints2, cv2.NORM_L2) / len(imgpoints2)
-            tot_error += error
-        return tot_error
+  def calculate_reprojection_error(intrinsic_camera_matrix, objpoints, imgpoints):
+    mtx = intrinsic_camera_matrix['MTX']
+    dist = intrinsic_camera_matrix['DIST']
+    rvecs = intrinsic_camera_matrix['RVECS']
+    tvecs = intrinsic_camera_matrix['TVECS']
+    
+    total_error = 0
+    for i in range(len(objpoints)):
+        imgpoints2, _ = cv2.projectPoints(objpoints[i], rvecs[i], tvecs[i], mtx, dist)
+        # Ensure we convert and reshape both to 2D arrays with the same dimensions and type (float32)
+        pts1 = np.asarray(imgpoints[i], dtype=np.float32).reshape(-1, 1, 2)
+        pts2 = np.asarray(imgpoints2, dtype=np.float32).reshape(-1, 1, 2)
+        error = cv2.norm(pts1, pts2, cv2.NORM_L2)
+        total_error += error
+    return total_error
 
 
 # Get the extrinsic camera calibration using the point correspondences and intrinsic camera matrix
